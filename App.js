@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {
   Text,
@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 // import Sound from 'react-native-sound';
+import {Audio} from 'expo-av';
 
 const soundList = [
   require('./assets/one.mp3'),
@@ -26,6 +27,21 @@ const soundList = [
 ];
 
 const App = () => {
+
+
+  const [sound, setSound] = useState();
+
+  async function playSound(soundVar) {
+    //console.log('Loading Sound');
+    const { sound } = await Audio.Sound.createAsync(soundVar);
+    setSound(sound);
+
+    //console.log('Playing Sound');
+    await sound.playAsync(); 
+  }
+
+
+
   return (
     <ScrollView style={styles.container}>
       <StatusBar />
@@ -37,6 +53,7 @@ const App = () => {
             <TouchableOpacity 
               key={sound}
               style={styles.box}
+              onPress={()=>{playSound(sound)}}
               >
               <Text style={styles.text}>{index+1}</Text>
             </TouchableOpacity>
